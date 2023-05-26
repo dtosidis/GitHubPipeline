@@ -25,4 +25,4 @@ jobs:
     - name: Print a message
       run: |
           npm install
-          npm test
+          npm run test
