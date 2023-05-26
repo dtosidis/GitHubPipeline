@@ -23,7 +23,7 @@ jobs:
         node-version: latest
     
     - name: Print a message
-      working-directory: ./frontend
+      working-directory: ../frontend
       run: |
           npm install
           npm run test
