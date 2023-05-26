@@ -10,7 +10,7 @@ on:
       - main
 
 jobs:
-  build:
+  lint:
     runs-on: ubuntu-latest
     
     steps:
@@ -21,9 +21,47 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: latest
-    
-    - name: Print a message
+
+    - name: run lint
       working-directory: starter/frontend
       run: |
-          npm install
+          npm ci
+          npm run lint
+
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v3
+    
+    - name: Use Node.js 18
+      uses: actions/setup-node@v3
+      with:
+        node-version: latest
+
+    - name: run test
+      working-directory: starter/frontend
+      run: |
+          npm ci
+          npm run test
+
+# Post-build job that depends on the completion of the previous two jobs
+  post-build-actions:
+    # Specifies that this job depends on the completion of 'lint' and 'test'
+    needs: [lint, test]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v3
+    
+    - name: Use Node.js 18
+      uses: actions/setup-node@v3
+      with:
+        node-version: latest
+
+    - name: build
+      working-directory: starter/frontend
+      run: |
+          npm ci
           npm run test
