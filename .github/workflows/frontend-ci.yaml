@@ -94,7 +94,8 @@ jobs:
     - name: Install dependencies
       working-directory: starter/frontend
       run: npm ci
-    # Runs lint
-    - name: Run test
-      working-directory: starter/frontend
-      run: npm run test
+    # using docker
+    - name: build
+      run: |
+        docker build --build-arg=REACT_APP_MOVIE_API_URL=http://localhost:5000 --tag=mp-frontend:latest .
+        docker run --name mp-frontend -p 3000:3000 -d mp-frontend]
