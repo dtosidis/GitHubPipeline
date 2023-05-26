@@ -5,6 +5,9 @@ on:
   pull_request:
     branches:
       - main
+  push:
+    branches:
+      - main
 
 jobs:
   build:
@@ -20,4 +23,6 @@ jobs:
         node-version: 18
     
     - name: Print a message
-      run: echo "Hello, world!"
+      run: |
+          npm install
+          npm test
