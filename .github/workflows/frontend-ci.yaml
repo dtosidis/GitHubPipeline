@@ -22,11 +22,21 @@ jobs:
       with:
         node-version: latest
 
-    - name: run lint
+    # Caches dependencies in ~/.npm directory
+    - name: Cache dependencies
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+    # Installs dependencies
+    - name: Install dependencies
+      run: npm ci
+    # Runs lint
+    - name: Run lint
       working-directory: starter/frontend
-      run: |
-          npm ci
-          npm run lint
+      run: npm run lint
 
   test:
     runs-on: ubuntu-latest
@@ -40,11 +50,21 @@ jobs:
       with:
         node-version: latest
 
-    - name: run test
+    # Caches dependencies in ~/.npm directory
+    - name: Cache dependencies
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+    # Installs dependencies
+    - name: Install dependencies
+      run: npm ci
+    # Runs lint
+    - name: Run test
       working-directory: starter/frontend
-      run: |
-          npm ci
-          npm run test
+      run: npm run test
 
 # Post-build job that depends on the completion of the previous two jobs
   post-build-actions:
@@ -60,8 +80,18 @@ jobs:
       with:
         node-version: latest
 
-    - name: build
+    # Caches dependencies in ~/.npm directory
+    - name: Cache dependencies
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+    # Installs dependencies
+    - name: Install dependencies
+      run: npm ci
+    # Runs lint
+    - name: Run test
       working-directory: starter/frontend
-      run: |
-          npm ci
-          npm run test
+      run: npm run test
