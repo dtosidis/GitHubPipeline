@@ -32,6 +32,7 @@ jobs:
           ${{ runner.os }}-node-
     # Installs dependencies
     - name: Install dependencies
+      working-directory: starter/frontend
       run: npm ci
     # Runs lint
     - name: Run lint
@@ -60,6 +61,7 @@ jobs:
           ${{ runner.os }}-node-
     # Installs dependencies
     - name: Install dependencies
+      working-directory: starter/frontend
       run: npm ci
     # Runs lint
     - name: Run test
@@ -90,6 +92,7 @@ jobs:
           ${{ runner.os }}-node-
     # Installs dependencies
     - name: Install dependencies
+      working-directory: starter/frontend
       run: npm ci
     # Runs lint
     - name: Run test
