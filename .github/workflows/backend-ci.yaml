@@ -5,6 +5,9 @@ on:
   pull_request:
     branches:
       - main
+  push:
+    branches:
+      - main
 
 jobs:
   lint:
@@ -14,8 +17,8 @@ jobs:
     - name: Check out repository
       uses: actions/checkout@v3
     
-    - name: Use Node.js 18
-      uses: actions/setup-node@v3
+    - name: Use Python 3.11
+      uses: actions/setup-python@v3
       with:
         node-version: latest
 
@@ -29,11 +32,11 @@ jobs:
           ${{ runner.os }}-node-
     # Installs dependencies
     - name: Install dependencies
-      working-directory: starter/frontend
+      working-directory: starter/backend
       run: pipenv install
     # Runs lint
     - name: Run lint
-      working-directory: starter/frontend
+      working-directory: starter/backend
       run: pipenv run lint
 
   test:
@@ -58,12 +61,12 @@ jobs:
           ${{ runner.os }}-node-
     # Installs dependencies
     - name: Install dependencies
-      working-directory: starter/frontend
+      working-directory: starter/backend
       run: pipenv install
     # Runs test
     - name: Run test
-      working-directory: starter/frontend
-      run: npm run test
+      working-directory: starter/backend
+      run: pipenv run serve
 
 # Post-build job that depends on the completion of the previous two jobs
   post-build-actions:
@@ -89,11 +92,11 @@ jobs:
           ${{ runner.os }}-node-
     # Installs dependencies
     - name: Install dependencies
-      working-directory: starter/frontend
+      working-directory: starter/backend
       run: pipenv install
     # using docker
     - name: build
-      working-directory: starter/frontend
+      working-directory: starter/backend
       run: |
         docker build --build-arg=REACT_APP_MOVIE_API_URL=http://localhost:5000 --tag=mp-frontend:latest .
         docker run --name mp-frontend -p 3000:3000 -d mp-frontend
