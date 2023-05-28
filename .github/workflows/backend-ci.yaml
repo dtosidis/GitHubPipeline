@@ -26,8 +26,8 @@ jobs:
     - name: Cache dependencies
       uses: actions/cache@v2
       with:
-        path: ~/.py
-        key: ${{ runner.os }}-python-${{ hashFiles('**/Pipfile.json') }}
+        path: ~/.local/share/virtualenvs
+        key: deps-python-${{ hashFiles('**/Pipfile.lock') }}
         restore-keys: |
           ${{ runner.os }}-python-
     # Installs dependencies
@@ -37,7 +37,7 @@ jobs:
     # Runs lint
     - name: Run lint
       working-directory: starter/backend
-      run: pip run lint pipenv
+      run: pipenv run lint
 
   test:
     runs-on: ubuntu-latest
@@ -55,8 +55,8 @@ jobs:
     - name: Cache dependencies
       uses: actions/cache@v2
       with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        path: ~/.local/share/virtualenvs
+        key: deps-python-${{ hashFiles('**/Pipfile.lock') }}
         restore-keys: |
           ${{ runner.os }}-node-
     # Installs dependencies
@@ -86,8 +86,8 @@ jobs:
     - name: Cache dependencies
       uses: actions/cache@v2
       with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        path: ~/.local/share/virtualenvs
+        key: deps-python-${{ hashFiles('**/Pipfile.lock') }}
         restore-keys: |
           ${{ runner.os }}-node-
     # Installs dependencies
