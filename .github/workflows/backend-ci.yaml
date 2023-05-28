@@ -55,7 +55,7 @@ jobs:
       with:
         node-version: latest
 
-    # Caches dependencies in ~/.npm directory
+    # Caches dependencies in ~/pip-cache/all-packages directory
     - name: Cache dependencies
       uses: actions/cache@v3
       with:
@@ -70,7 +70,6 @@ jobs:
       run: | 
         pip install --upgrade pip
         pip install pipenv
-        pip install flake8
         pip install pytest
         pip install flask
         pip install flask-cors
@@ -88,26 +87,31 @@ jobs:
     - name: Check out repository
       uses: actions/checkout@v3
     
-    - name: Use Node.js 18
-      uses: actions/setup-node@v3
+    - name: Use Python 3.11
+      uses: actions/setup-python@v3
       with:
         node-version: latest
 
-    # Caches dependencies in ~/.npm directory
+    # Caches dependencies in ~/pip-cache/all-packages directory
     - name: Cache dependencies
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
-        path: ~/.local/share/virtualenvs
+        path: ~/pip-cache/all-packages
         key: deps-python-${{ hashFiles('**/Pipfile.lock') }}
         restore-keys: |
-          ${{ runner.os }}-node-
+          ${{ runner.os }}-python-
+
     # Installs dependencies
     - name: Install dependencies
-      working-directory: starter/backend
-      run: pipenv install
-    # using docker
+      run: | 
+        pip install --upgrade pip
+        pip install pipenv
+        pip install flake8
+        pip install pytest
+        pip install flask
+        pip install flask-cors
+      
+    # Run application
     - name: build
       working-directory: starter/backend
-      run: |
-        docker build --build-arg=REACT_APP_MOVIE_API_URL=http://localhost:5000 --tag=mp-frontend:latest .
-        docker run --name mp-frontend -p 3000:3000 -d mp-frontend
+      run: pipenv run serve
