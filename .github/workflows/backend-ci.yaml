@@ -26,10 +26,10 @@ jobs:
     - name: Cache dependencies
       uses: actions/cache@v2
       with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        path: ~/.py
+        key: ${{ runner.os }}-node-${{ hashFiles('**/Pipfile.json') }}
         restore-keys: |
-          ${{ runner.os }}-node-
+          ${{ runner.os }}-python-
     # Installs dependencies
     - name: Install dependencies
       working-directory: starter/backend
@@ -46,8 +46,8 @@ jobs:
     - name: Check out repository
       uses: actions/checkout@v3
     
-    - name: Use Node.js 18
-      uses: actions/setup-node@v3
+    - name: Use Python 3.11
+      uses: actions/setup-python@v3
       with:
         node-version: latest
 
