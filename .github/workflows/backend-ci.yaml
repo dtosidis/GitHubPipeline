@@ -28,18 +28,13 @@ jobs:
       with:
         path: ~/.local/share/virtualenvs
         key: deps-python-${{ hashFiles('**/Pipfile.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-python-
     # Installs dependencies
     - name: Install dependencies
       working-directory: starter/backend
-      run: pip install --upgrade pip
-    - name: Install dependencies
-      working-directory: starter/backend
-      run: pip install pipenv
-    - name: Install dependencies
-      working-directory: starter/backend
-      run: pip install --dev
+      run: | 
+        pip install --upgrade pip
+        run: pip install pipenv
+        run: pip install --dev
     # Runs lint
     - name: Run lint
       working-directory: starter/backend
