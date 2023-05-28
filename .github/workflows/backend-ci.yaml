@@ -22,7 +22,7 @@ jobs:
       with:
         node-version: latest
 
-    # Caches dependencies in ~/.npm directory
+    # Caches dependencies in ~/pip-cache/all-packages directory
     - name: Cache dependencies
       uses: actions/cache@v3
       with:
@@ -57,20 +57,24 @@ jobs:
 
     # Caches dependencies in ~/.npm directory
     - name: Cache dependencies
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
-        path: ~/.local/share/virtualenvs
+        path: ~/pip-cache/all-packages
         key: deps-python-${{ hashFiles('**/Pipfile.lock') }}
         restore-keys: |
-          ${{ runner.os }}-node-
+          ${{ runner.os }}-python-
+
     # Installs dependencies
     - name: Install dependencies
       working-directory: starter/backend
-      run: pipenv install
+      run: | 
+        pip install --upgrade pip
+        pip install pipenv
+        pip install flake8
     # Runs test
     - name: Run test
       working-directory: starter/backend
-      run: pipenv run serve
+      run: pipenv run test
 
 # Post-build job that depends on the completion of the previous two jobs
   post-build-actions:
