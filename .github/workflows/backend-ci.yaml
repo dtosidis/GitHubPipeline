@@ -26,8 +26,8 @@ jobs:
     - name: Cache dependencies
       uses: actions/cache@v2
       with:
-        path: ~/.py
-        key: ${{ runner.os }}-python-${{ hashFiles('**/Pipfile.lock') }}
+        path: ~/.local/share/virtualenvs
+        key: deps-python-${{ hashFiles('**/Pipfile.lock') }}
         restore-keys: |
           ${{ runner.os }}-python-
     # Installs dependencies
