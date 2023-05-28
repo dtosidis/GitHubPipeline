@@ -33,6 +33,9 @@ jobs:
     # Installs dependencies
     - name: Install dependencies
       working-directory: starter/backend
+      run: pip install --upgrade pip
+    - name: Install dependencies
+      working-directory: starter/backend
       run: pip install pipenv
     - name: Install dependencies
       working-directory: starter/backend
