@@ -39,7 +39,7 @@ jobs:
       run: pip install pipenv
     - name: Install dependencies
       working-directory: starter/backend
-      run: pip install flake8
+      run: pip install --dev
     # Runs lint
     - name: Run lint
       working-directory: starter/backend
