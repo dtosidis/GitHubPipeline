@@ -71,6 +71,7 @@ jobs:
         pip install --upgrade pip
         pip install pipenv
         pip install flake8
+        pip install pytest
     # Runs test
     - name: Run test
       working-directory: starter/backend
