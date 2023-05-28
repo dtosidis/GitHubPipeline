@@ -73,6 +73,7 @@ jobs:
         pip install flake8
         pip install pytest
         pip install flask
+        pip install flask-cors
     # Runs test
     - name: Run test
       working-directory: starter/backend
