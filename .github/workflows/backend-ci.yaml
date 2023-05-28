@@ -26,11 +26,14 @@ jobs:
     - name: Cache dependencies
       uses: actions/cache@v2
       with:
-        path: ~/.local/share/virtualenvs
-        key: deps-python-${{ hashFiles('**/Pipfile.lock') }}
+        path: ~/.py
+        key: ${{ runner.os }}-python-${{ hashFiles('**/Pipfile.lock') }}
         restore-keys: |
           ${{ runner.os }}-python-
     # Installs dependencies
+    - name: Install dependencies
+      working-directory: starter/backend
+      run: pip show -f flake8
     - name: Install dependencies
       working-directory: starter/backend
       run: pip install pipenv
