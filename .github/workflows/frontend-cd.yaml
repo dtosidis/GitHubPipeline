@@ -1,0 +1,99 @@
+name: Frontend Continuous Deployment
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v3
+    
+    - name: Use Node.js 18
+      uses: actions/setup-node@v3
+      with:
+        node-version: latest
+
+    # Caches dependencies in ~/.npm directory
+    - name: Cache dependencies
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+    # Installs dependencies
+    - name: Install dependencies
+      working-directory: starter/frontend
+      run: npm ci
+    # Runs lint
+    - name: Run lint
+      working-directory: starter/frontend
+      run: npm run lint
+
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v3
+    
+    - name: Use Node.js 18
+      uses: actions/setup-node@v3
+      with:
+        node-version: latest
+
+    # Caches dependencies in ~/.npm directory
+    - name: Cache dependencies
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+    # Installs dependencies
+    - name: Install dependencies
+      working-directory: starter/frontend
+      run: npm ci
+    # Runs test
+    - name: Run test
+      working-directory: starter/frontend
+      run: npm run test
+
+# Post-build job that depends on the completion of the previous two jobs
+  post-build-actions:
+    # Specifies that this job depends on the completion of 'lint' and 'test'
+    needs: [lint, test]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v3
+    
+    - name: Use Node.js 18
+      uses: actions/setup-node@v3
+      with:
+        node-version: latest
+
+    # Caches dependencies in ~/.npm directory
+    - name: Cache dependencies
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+    # Installs dependencies
+    - name: Install dependencies
+      working-directory: starter/frontend
+      run: npm ci
+    # using docker
+    - name: build
+      working-directory: starter/frontend
+      run: |
+        docker build --build-arg=REACT_APP_MOVIE_API_URL=http://localhost:5000 --tag=mp-frontend:latest .
+        docker run --name mp-frontend -p 3000:3000 -d mp-frontend
