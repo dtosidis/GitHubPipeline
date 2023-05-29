@@ -5,6 +5,9 @@ on:
   pull_request:
     branches:
       - main
+  push:
+    branches:
+      - main
 
 jobs:
   lint:
@@ -97,3 +100,21 @@ jobs:
       run: |
         docker build --build-arg=REACT_APP_MOVIE_API_URL=http://localhost:5000 --tag=mp-frontend:latest .
         docker run --name mp-frontend -p 3000:3000 -d mp-frontend
+        
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ vars.AWS_REGION }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+#    - name: Publish the docker image to ECR
+#      env:
+#        REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+#      run: |
+#        docker tag $IMAGE_NAME:${GITHUB_SHA::7} $REGISTRY/$IMAGE_NAME:${GITHUB_SHA::7}
+#        docker push $REGISTRY/$IMAGE_NAME:${GITHUB_SHA::7}
